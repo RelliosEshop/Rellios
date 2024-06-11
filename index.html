@@ -1,20 +1,44 @@
-<html>
-    <head>
-        <title>Rellios</title>
-        <link rel="icon" type="image/x-icon" href="images/favicon.png">
-        <link href="styles/style.css" rel="stylesheet" type="text/css">
-    </head>
-    <body >
-        
-        <div class="c">
-            <img src="images/home2.png">
-            <p>Coming Soon</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+    <title>Rellios</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0d1117;
+            color: white;
+            font-family:sans-serif; font-size: 22px;
+        }
+        .container {
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            max-width: 200px; /* limit image size on larger screens */
+            height: auto;
+        }
+        .text-below {
+            margin-top: 10px;
             
-        </div>
-        
-
-        
-        
-    </body>
-
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="images/home2.png" alt="Image">
+        <div class="text-below">Coming soon</div>
+    </div>
+</body>
 </html>
