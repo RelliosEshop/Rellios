@@ -3,44 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Εδώ θα βρείς τον υπολογιστή που σου ταιριάζει στην χαμηλότερη τίμη τις αγοράς." />
-    <meta name="google-site-verification" content="QqftTMQLUC7K--6W_TiN8kdw59BFUeXmM3JPHDzHMtQ" />
-    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+    <meta name="description" content="Εδώ θα βρείς τον υπολογιστή που σου ταιριάζει στην χαμηλότερη τίμη τις αγοράς.">
+    <meta name="google-site-verification" content="QqftTMQLUC7K--6W_TiN8kdw59BFUeXmM3JPHDzHMtQ">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
     <title>Rellios</title>
+    <title>PC E-Shop</title>
     <style>
-        body, html {
+        /* Reset some default styles */
+        * {
             margin: 0;
             padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: #fff;
+            margin: 0;
+        }
+
+        header {
             background-color: #0d1117;
             color: white;
-            font-family:sans-serif; font-size: 22px;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         
         }
-        .container {
-            text-align: center;
+
+        .logo {
+            display: flex;
+            align-items: center;
         }
-        img {
-            width: 100%;
-            max-width: 200px; /* limit image size on larger screens */
+
+        .logo img {
+            max-width: 150px;
             height: auto;
+            margin-right: 10px;
         }
-        .text-below {
-            margin-top: 10px;
-            
+
+        
+
+        nav {
+            text-align: right;
+            flex-grow: 1; /* Allows nav to take up remaining space */
+        }
+
+        nav a {
             color: white;
-            padding: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            transition: background-color 0.3s ease;
             border-radius: 5px;
             display: inline-block;
         }
+
+        nav a:hover {
+            background-color: #333;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            
+        }
+
+        .product {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product h2 {
+            font-size: 20px;
+            margin: 8px 0;
+        }
+
+        .product p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .price {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .buy-now {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #0d1117;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-now:hover {
+            background-color: #333;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 50vh;
+        }
+        .content {
+            flex: 1;
+        }
+        .footer {
+            background-color: #0d1117;
+            color: white;
+            padding: 20px 0;
+        }
+        .footer .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+            background-color: #0d1117;
+        }
+        .footer .column {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px 0;
+        }
+        .footer h3 {
+            border-bottom: 2px solid #0d1117;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer ul li a:hover {
+            color: #ddd;
+        }
+        .footer .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+        .footer .social-icons a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer .social-icons a:hover {
+            color: #ddd;
+        }
+        .footer-bottom {
+            background-color: #0d1117;
+            color: #aaa;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .logo img {
+                max-width: 150px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            header {
+                padding: 10px;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+            }
+
+            nav {
+                text-align: center;
+                margin-top: 10px;
+                
+                font-size: 16px;
+            }
+
+            nav a {
+                display: block;
+                padding: 10px 0;
+                margin: 5px 0;
+            }
+
+            footer {
+                padding: 10px;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <a href="https://rellios.gr/"><img src="assets/images/home2.png" alt="HOME"></a>
+            
+        </div>
+        <nav>
+            <a href="#products">Desktops</a>
+            <a href="#about">Σχετικά με</a>
+            <a href="#contact">Επικοινωνία</a>
+        </nav>
+    </header>
+    <div class="container"><h2>Σταθεροί Υπολογιστές</h2></div>
     <div class="container">
-        <img src="images/home2.png" alt="Image">
-        <div class="text-below">Coming soon</div>
+        <div class="product">
+            <img src="/assets/images/pc3.jpeg" alt="Product 1">
+            <h2>Desktop PC (AMD Ryzen 3 3200G\8GB\128GB)</h2>
+            <p>Ιδανικό για απλές εργασίες και ελαφρύ Gaming</p>
+            <p class="price">215,00 €</p>
+            <a href="/desktops/desktop-pc-amd-ryzen-3-3200g-8gb-128gb/"><button class="buy-now">Δες το</button></a>
+        </div>
+        <div class="product">
+            <img src="/assets/images/pc3.jpeg" alt="Product 1">
+            <h2>Desktop PC (AMD Ryzen 3 3200G\8GB\240GB)</h2>
+            <p>Ιδανικό για απλές εργασίες και ελαφρύ Gaming</p>
+            <p class="price">235,00 €</p>
+            <a href="/desktops/desktop-pc-amd-ryzen-3-3200g-8gb-240gb/"><button class="buy-now">Δες το</button></a>
+        </div>
+        <div class="product">
+            <img src="/assets/images/pc3.jpeg" alt="Product 1">
+            <h2>Desktop PC (AMD Ryzen 3 3200G\16GB\240GB)</h2>
+            <p>Ιδανικό για απλές εργασίες και ελαφρύ Gaming</p>
+            <p class="price">255,00 €</p>
+            <a href="/desktops/desktop-pc-amd-ryzen-3-3200g-16gb-240gb/"><button class="buy-now">Δες το</button></a>
+        </div>
+        
+        <!-- Additional product divs here -->
+    </div>
+    
+    <div class="wrapper">
+        <div class="content">
+            <!-- Your main content goes here -->
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="https://rellios.gr/">Αρχική</a></li>
+                        <li><a href="#shop">Desktops</a></li>
+                        <li><a href="#about">Home PCs</a></li>
+                        <li><a href="#contact">Gaming PCs</a></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Rellios</h3>
+                    <ul>
+                        <li><a href="#about">Σχετικά με εμάς</a></li>
+                        <li><a href="#returns">Γιατί εμάς</a></li>      
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Βοήθεια</h3>
+                    <ul>
+                        <li><a href="#faq">Τρόποι Πληρωμής</a></li>
+                        <li><a href="#faq">Επιστροφές</a></li>
+                        <li><a href="#faq">Συχνές ερωτήσεις και επικοινωνία</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Βρες μας</h3>
+                    <div class="social-icons">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Rellios. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
