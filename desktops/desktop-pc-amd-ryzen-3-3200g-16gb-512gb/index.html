@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://rellios.gr/assets/images/favicon.png">
+    <title>Desktop PC (AMD Ryzen 3 3200G\16GB\512GB) - Rellios</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            background-color: #fff;
+            margin: 0;
+            
+        }
+        .container {
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #0d1117;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        
+
+        nav {
+            text-align: right;
+            flex-grow: 1; /* Allows nav to take up remaining space */
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            background-color: #333;
+        }
+
+      
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 50vh;
+        }
+        .content {
+            flex: 1;
+        }
+        .footer {
+            background-color: #0d1117;
+            color: white;
+            padding: 20px 0;
+        }
+        .footer .container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+            background-color: #0d1117;
+        }
+        .footer .column {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px 0;
+        }
+        .footer h3 {
+            border-bottom: 2px solid #0d1117;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer ul li a:hover {
+            color: #ddd;
+        }
+        .footer .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+        .footer .social-icons a {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer .social-icons a:hover {
+            color: #ddd;
+        }
+        .footer-bottom {
+            background-color: #0d1117;
+            color: #aaa;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        
+        .product-page {
+            display: flex;
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product-images {
+            flex: 1;
+            text-align: center;
+        }
+
+        .product-images img {
+            max-width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .thumbnail-images img {
+            width: 80px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .product-details {
+            flex: 2;
+            padding: 0 20px;
+        }
+
+        .product-details h2 {
+            margin-top: 0;
+        }
+
+        .product-details .price {
+            font-size: 1.5em;
+            color: #0a0a0a;
+        }
+
+        .product-details .description {
+            margin: 20px 0;
+        }
+        
+
+        .specifications {
+            list-style: none;
+            padding: 0;
+        }
+
+        .specifications li {
+            margin: 5px 0;
+        }
+
+        .add-to-cart {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e67e22;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .customer-reviews {
+            margin: 20px 0;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .customer-reviews .review {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .customer-reviews .review:last-child {
+            border-bottom: none;
+        }
+        .related{
+            width: 90%;
+            margin: 0 auto 40px;
+        }
+        .related .row{
+            width: 100%;
+            height: auto;
+        }
+        .columns{
+            flex-basis: 22%;
+            height: 50%;
+        }
+        .items img{
+            width: 100%;
+        }
+        .details{
+            margin-top: 10px;
+        }
+        .details p{
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .details .rating{
+            margin: 10px 0;
+        }
+        /* Product Specs */
+        #specs {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 50%;
+        }
+
+        #specs td, #specs th {
+
+        padding: 10px;
+
+        }
+
+        #specs tr:nth-child(even){background-color: #f2f2f2;}
+
+        #specs tr:hover {background-color: #ddd;}
+
+        #specs th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .logo img {
+                max-width: 150px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            header {
+                padding: 10px;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+            }
+
+            nav {
+                text-align: center;
+                margin-top: 10px;
+                
+                font-size: 16px;
+            }
+
+            nav a {
+                display: block;
+                padding: 10px 0;
+                margin: 5px 0;
+            }
+
+            footer {
+                padding: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="https://rellios.gr/"><img src="https://rellios.gr/assets/images/home2.png" alt="HOME"></a>
+            
+        </div>
+        <nav>
+            
+            <a href="https://rellios.gr/">Desktops</a>
+            <a href="https://rellios.gr/about-us">Σχετικά Με</a>
+            <a href="https://rellios.gr/contact-us">Επικοινωνία</a>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="product-page">
+                <div class="product-images">
+                    <img src="image.jpeg" alt="Product Image" id="main-image">
+                    
+                </div>
+                <div class="product-details">
+                    <h2>Desktop PC (AMD Ryzen 3 3200G\16GB\512GB)</h2>
+                    
+                    <p class="description">
+                        Ιδανικός χρήση γράφειου και ελαφρύ Gaming.
+                    </p>
+                    
+                    <br>
+                    
+                    <p style="color: green;">3 έτη εγγύηση.</p>
+                    <p>Παράδοση σε 3-5 εργάσιμες ημέρες με δωρεάν μεταφορικά.</p>
+                    <br>
+                    <p class="price">288,00€</p>
+                    <br>
+                    Δεν ειναι διαθέσιμο.
+                </div>
+            </div>
+            <div class="customer-reviews">
+                <div class="related">
+					<h1>Τεχνικά χαρακτηριστικά</h1><br>
+
+					<table id="specs">
+					  <tr>
+					    <th><h3>Επεξεργαστής</th></h3>
+					  </tr>
+					  <tr>
+					    <td>Κατασκευαστής</td>
+					    <td><b>AMD</b></td>
+					  </tr>
+					  <tr>
+					    <td>Οικογένεια</td>
+					    <td><b>Ryzen 3</b></td>
+					  </tr>
+					  <tr>
+					    <td>Μοντέλο</td>
+					    <td><b>3 3200G</b></td>
+
+					  </tr>
+					  <tr>
+					    <td>Πυρήνες</td>
+					    <td><b>4</b></td>
+					  </tr>
+					  <tr>
+					    <td>Threads</td>
+					    <td><b>8</b></td>
+					  </tr>
+					  <tr>
+					    <td>Συχνότητα</td>
+					    <td><b>3,6 Ghz</b></td>
+					  </tr>
+                      <tr>
+					    <td>Μέγιστη Συχνότητα</td>
+					    <td><b>3.9 Ghz</b></td>
+					  </tr>
+					  
+
+						<tr>
+					    <th><h3>Μνήμη RAM</th></h3>
+					  </tr>
+					  <tr>
+					    <td>Μέγεθος</td>
+					    <td><b>16GB (2x8GB)</b></td>
+					  </tr>
+					  <tr>
+					    <td>Τύπος</td>
+					    <td><b>DDR4</b></td>
+					  </tr>
+                      <tr>
+					    <td>Ταχύτητα</td>
+					    <td><b>2400 MHz</b></td>
+					  </tr>
+						<tr>
+					    <th><h3>Σκληρός Δίσκος</th></h3>
+					  </tr>
+					  <tr>
+					    <td>Τύπος</td>
+					    <td><b>SSD</b></td>
+					  </tr>
+					  <tr>
+					    <td>Χωρητικότητα</td>
+					    <td><b>512 GB</b></td>
+					  </tr>
+						<th><h3>Κάρτα Γραφικών</th></h3>
+					</tr>
+					<tr>
+						<td>Ενσωματωμένα Γραφικά</td>
+						<td><b>AMD Radeon Vega 8</b></td>
+					</tr>
+                    <th><h3>Τροφοδοτικό</th></h3>
+                    <tr>
+						<td>Παρεχόμενη Ισχύς Τροφοδοτικού</td>
+                        <td><b>500 W</b></td>
+					</tr>
+                    <th><h3>Θύρες</th></h3>
+                    <tr>
+						<td>USB 2.0</td>
+                        <td><b>2xUSB 2.0</b></td>
+					</tr>
+                    <tr>
+						<td>USB 3.2</td>
+                        <td><b>4xUSB 3.2</b></td>
+					</tr>
+                    <tr>
+						<td>Έξοδοι Εικόνας</td>
+                        <td><b>HDMI, DVI-D</b></td>
+					</tr>
+                    <tr>
+						<td>Θύρα Ethernet</td>
+                        <td><b>1</b></td>
+					</tr>
+                    <th><h3>Γενικά Χαρακτηριστικά</th></h3>
+					</tr>
+                    
+					<tr>
+						<td>Κανάλια Ήχου</td>
+                        <td><b>7.1</b></td>
+					</tr>
+                    <th><h3>Λειτουργικό</th></h3>
+					</tr>
+                    
+					<tr>
+						<td>Λειτουργικό Συστημά</td>
+                        <td><b>Windows 10 Home</b></td>
+					</tr>
+                    <th><h3>Περιφερειακά</th></h3>
+					</tr>
+                    
+					<tr>
+						<td>Οθόνη</td>
+                        <td><b>Δεν Περιλαμβάνεται</b></td>
+					</tr>
+                    <tr>
+						<td>Πληκτρολόγιο</td>
+                        <td><b>Δεν Περιλαμβάνεται</b></td>
+					</tr>
+                    <tr>
+						<td>Ήχος</td>
+                        <td><b>Δεν Περιλαμβάνεται</b></td>
+					</tr>
+					
+					
+
+					</table>
+
+
+
+
+		</div>
+            </div>
+        </div>
+    </main>
+
+
+
+    
+    <div class="wrapper">
+        <div class="content">
+            <!-- Your main content goes here -->
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="https://rellios.gr/">Αρχική</a></li>
+                        <li><a href="https://rellios.gr/">Desktops</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Rellios</h3>
+                    <ul>
+                        <li><a href="https://rellios.gr/about-us">Σχετικά με εμάς</a></li>
+                        <li><a href="https://rellios.gr/personal-data">Προσωπικά Δεδομένα</a></li>      
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Βοήθεια</h3>
+                    <ul>
+                        <li><a href="https://rellios.gr/contact-us">Επικοινωνία</a></li>
+                        <li><a href="https://rellios.gr/payment-methods">Τρόποι Πληρωμής</a></li>
+                        <li><a href="https://rellios.gr/returns">Επιστροφές</a></li>
+                        
+                        
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Βρες μας</h3>
+                    <div class="social-icons">
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>  
+                    </div>
+                    
+                </div>
+                
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Rellios. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
