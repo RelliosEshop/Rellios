@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://rellios.gr/assets/images/favicon.png">
+    <title>Επικοινώνησε μαζί μας</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .containerForm {
+            width: 50%;
+            height: 600px; /* Fixed height */
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Ensures the form title stays at the top */
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 0; /* Ensures the title stays at the very top */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Ensures the form takes up remaining space */
+            justify-content: center; /* Centers the form content */
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #000;
+            text-align: left;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 98%;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            background-color: #000;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        #thanksMessage, #errorMessage {
+            display: none;
+            font-size: 20px;
+            color: #000;
+            text-align: center;
+            margin-top: 50px; /* Adds some space between the form and the message */
+        }
+
+    
+        /* Mobile view */
+        @media (max-width: 600px) {
+            .containerForm {
+                width: 95%;
+                padding: 15px;
+                height: auto; /* Allow height to adjust on smaller screens */
+            }
+            h2 {
+                font-size: 20px;
+            }
+            label {
+                font-size: 14px;
+            }
+            input, textarea {
+                font-size: 16px;
+                width: 100%;
+            }
+            button {
+                font-size: 14px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">Header</div>
+
+    <div class="containerForm">
+        <h2>Επικοινώνησε μαζί μας</h2>
+        <form id="contactForm">
+            <label for="name">Όνομα</label>
+            <input type="text" id="name" name="name" required maxlength="50">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required maxlength="50">
+
+            <label for="message">Μήνυμα</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit">Αποστολή Μηνύματος</button>
+        </form>
+        
+        <p id="thanksMessage">Σε ευχαριστούμε! <br>Πήραμε το μήνυμά σου και θα σου απαντήσουμε σύντομα.</p>
+        <p id="errorMessage">Ουπς, φαίνεται πως κάτι πήγε στραβά. Ξανά προσπάθησε.</p>
+    </div>
+
+    <div id="footer">Footer</div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var message = document.getElementById('message').value;
+        
+        var formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("msg", message);
+        
+        fetch('https://rsmonitor.atwebpages.com/contact_form.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            if (data.status === 'success') {
+                console.log("Message sent successfully.");
+                document.getElementById("contactForm").style.display = "none";
+                document.querySelector(".containerForm h2").style.display = "none"; // Hide <h2>
+                document.getElementById("thanksMessage").style.display = "block";
+                document.getElementById("errorMessage").style.display = "none";  // Hide error message if successful
+            } else {
+                console.error("Error:", data.message);
+                document.getElementById("thanksMessage").style.display = "none"; // Hide success message if error occurs
+                document.getElementById("errorMessage").style.display = "block"; // Show error message
+            }
+        })
+        .catch(error => {
+            console.error("There was an error:", error);
+            document.getElementById("thanksMessage").style.display = "none"; // Hide success message if error occurs
+            document.getElementById("errorMessage").style.display = "block"; // Show error message
+        });
+    });
+
+
+        fetch('../header.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('header').innerHTML = data);
+            
+        fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+    </script>
+</body>
+</html>
