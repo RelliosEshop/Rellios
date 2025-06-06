@@ -1,0 +1,201 @@
+{
+  "products": [
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "111 Beast 3000",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "gaming"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "id": "00001",
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    },
+    {
+      "name": "Desktop PC (AMD Ryzen 5 5600G\\16GB\\512GB)",
+      "description": "High-end gaming PC with RTX 4080",
+      "price": 2499.99,
+      "image": "image.jpeg",
+      "category": "home"
+    }
+  ]
+}

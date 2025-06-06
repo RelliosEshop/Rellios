@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eShop - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .category-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .category-selector button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .category-selector button:hover,
+    .category-selector button.active {
+      background-color: #1abc9c;
+    }
+
+    .category {
+      margin-bottom: 60px;
+    }
+
+    .category h2 {
+      font-size: 2em;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-start;
+    }
+
+    .product {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 30%;
+      box-sizing: border-box;
+      padding: 15px;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .product h4 {
+      font-size: 1em;
+      font-weight: 600;
+      color: #333;
+      margin: 10px 0 5px 0;
+    }
+
+    .product .code {
+      font-size: 0.8em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .product .price {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #000;
+      margin: 10px 0;
+    }
+
+    .product .buy-button {
+      background-color: #1abc9c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .product .availability {
+      font-size: 0.85em;
+      color: #2ecc71;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      .product {
+        width: 45%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .product {
+        width: 100%;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="container">
+      <div class="category-selector" id="category-selector">
+        <button onclick="showCategory('desktops')" class="active">Desktops</button>
+        <button onclick="showCategory('gaming')">Gaming PCs</button>
+        <button onclick="showCategory('home')">Home PCs</button>
+        <button onclick="showCategory('workstations')">Workstations</button>
+      </div>
+
+      <div class="main" id="main">
+        <!-- Products will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let categories = {
+      desktops: [],
+      gaming: [],
+      home: [],
+      workstations: []
+    };
+
+    function renderCategory(category) {
+      const main = document.getElementById('main');
+      main.innerHTML = '';
+
+      const section = document.createElement('div');
+      section.className = 'category';
+
+      const title = document.createElement('h2');
+      title.textContent = category.charAt(0).toUpperCase() + category.slice(1).replace(/pcs$/, ' PCs');
+      section.appendChild(title);
+
+      const productContainer = document.createElement('div');
+      productContainer.className = 'products';
+
+      categories[category].forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+
+        productDiv.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <h4>${product.name}</h4>
+          <div class="code">Κωδ. ${product.id || '0000000'}</div>
+          <div class="price">${product.price.toFixed(2)} €</div>
+          <button class="buy-button">Προσθήκη</button>
+          <div class="availability">Διαθέσιμο για παράδοση</div>
+        `;
+
+        productContainer.appendChild(productDiv);
+      });
+
+      section.appendChild(productContainer);
+      main.appendChild(section);
+    }
+
+    function showCategory(category) {
+      renderCategory(category);
+      const buttons = document.querySelectorAll('#category-selector button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(buttons).find(b => b.textContent.toLowerCase().includes(category));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    fetch('products.json')
+      .then(response => response.json())
+      .then(data => {
+        data.products.forEach(product => {
+          if (product.category && categories[product.category.toLowerCase()]) {
+            categories[product.category.toLowerCase()].push(product);
+          }
+        });
+        renderCategory('desktops'); // Default category
+      })
+      .catch(error => console.error('Error loading products:', error));
+  </script>
+</body>
+</html>
