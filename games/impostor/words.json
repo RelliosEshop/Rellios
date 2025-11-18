@@ -1,42 +1,52 @@
 [
-    {
-        "word": "astronaut",
-        "hint": "A person trained to travel in a spacecraft."
-    },
-    {
-        "word": "volcano",
-        "hint": "A mountain that can erupt lava."
-    },
-    {
-        "word": "pyramid",
-        "hint": "Ancient triangular structures found in Egypt."
-    },
-    {
-        "word": "compass",
-        "hint": "A tool that shows direction."
-    },
-    {
-        "word": "galaxy",
-        "hint": "A huge collection of stars, gas, and dust."
-    },
-    {
-        "word": "oxygen",
-        "hint": "A gas humans need to breathe."
-    },
-    {
-        "word": "robot",
-        "hint": "A machine designed to perform tasks."
-    },
-    {
-        "word": "jungle",
-        "hint": "A dense forest with many wild animals."
-    },
-    {
-        "word": "diamond",
-        "hint": "A precious gemstone known for its hardness."
-    },
-    {
-        "word": "whisper",
-        "hint": "To speak very softly."
-    }
+  {
+    "word": "μακαρόνια",
+    "hint": "ζύμη",
+    "category": "φαγητό"
+  },
+  {
+    "word": "πίτσα",
+    "hint": "κρούστα",
+    "category": "φαγητό"
+  },
+  {
+    "word": "σουβλάκι",
+    "hint": "κάρβουνα",
+    "category": "φαγητό"
+  },
+  {
+    "word": "παραλία",
+    "hint": "κύμα",
+    "category": "τοποθεσία"
+  },
+  {
+    "word": "βουνό",
+    "hint": "κορυφή",
+    "category": "τοποθεσία"
+  },
+  {
+    "word": "σπήλαιο",
+    "hint": "σκοτάδι",
+    "category": "τοποθεσία"
+  },
+  {
+    "word": "τηλέφωνο",
+    "hint": "σήμα",
+    "category": "αντικείμενο"
+  },
+  {
+    "word": "κλειδιά",
+    "hint": "κλείδωμα",
+    "category": "αντικείμενο"
+  },
+  {
+    "word": "πορτοφόλι",
+    "hint": "τσέπη",
+    "category": "αντικείμενο"
+  },
+  {
+    "word": "φακός",
+    "hint": "ακτίνα",
+    "category": "αντικείμενο"
+  }
 ]
