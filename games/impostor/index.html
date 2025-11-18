@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Impostor Game</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+  }
+.container {
+  width: 100%;
+  max-width: 400px;
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  
+}
+  label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-size: 1rem; 
+  }
+  input, select, button {
+    
+    width: calc(100% - 24px); /* Reduced width with padding consideration */
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensures padding is included in width calculation */
+  }
+input, select {
+      background: #2a2a2a; 
+    color: #fff;   
+  width: calc(100% - 24px);
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+  button { 
+    margin-left: auto;
+  margin-right: auto;
+  display: block;
+    background: #4caf50; 
+    color: white; 
+    cursor: pointer; 
+    font-weight: bold; 
+  }
+  button:disabled { 
+    background: #555; 
+    cursor: not-allowed; 
+  }
+  .overlay {
+    position: fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%;
+    background: rgba(0,0,0,0.8);
+    display: none; 
+    justify-content: center; 
+    align-items: center;
+  }
+  .card { 
+    background:#1e1e1e; 
+    padding:20px; 
+    border-radius:12px; 
+    text-align:center; 
+    width:80%; 
+    max-width:300px; 
+    
+  }
+</style>
+</head>
+<body>
+<div class="container" id="gameContainer">
+  <label for="players">How many players?</label>
+  <input type="number" id="players" min="2" max="20" placeholder="Enter number of players" />
+
+  <label for="impostors">How many impostors?</label>
+  <select id="impostors" disabled></select>
+
+  <button id="nextBtn" disabled>Next</button>
+</div>
+
+<script>
+const container = document.getElementById("gameContainer");
+const playersInput = document.getElementById("players");
+const impostorsSelect = document.getElementById("impostors");
+const nextBtn = document.getElementById("nextBtn");
+
+let wordsData = [];
+let currentGame = {
+  names: [],
+  impostorCount: 0,
+  secretWord: '',
+  hint: '',
+  impostors: []
+};
+
+// Load words.json
+fetch('words.json')
+  .then(resp => resp.json())
+  .then(data => wordsData = data)
+  .catch(err => { console.error(err); alert("Failed to load words.json"); });
+
+// Enable Next button and impostors when players input valid
+playersInput.addEventListener("input", () => {
+  let numPlayers = parseInt(playersInput.value);
+
+  // Clamp the value between 2 and 20
+  if(isNaN(numPlayers) || numPlayers < 2) {
+    numPlayers = 3;
+  } else if(numPlayers > 20) {
+    numPlayers = 20;
+  }
+
+  // Update the input field to reflect the clamped value
+  playersInput.value = numPlayers;
+
+  // Enable/disable impostor select and Next button
+  if(numPlayers >= 2){
+    impostorsSelect.disabled = false;
+
+    // Generate impostor options dynamically
+    impostorsSelect.innerHTML = '';
+    const maxImpostors = numPlayers - 2; // at least 2 more players than impostors
+    for(let i=1; i<=maxImpostors; i++){
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i;
+      impostorsSelect.appendChild(opt);
+    }
+
+    nextBtn.disabled = false;
+  } else {
+    impostorsSelect.disabled = true;
+    nextBtn.disabled = true;
+  }
+});
+
+
+nextBtn.addEventListener("click", () => {
+  const players = parseInt(playersInput.value);
+  const impostors = parseInt(impostorsSelect.value);
+  currentGame.impostorCount = impostors;
+  showNameScreen(players, impostors);
+});
+
+// Stage 2: enter player names
+function showNameScreen(players, impostorCount){
+  let html = `<h2>Enter Player Names</h2>`;
+  for(let i=1;i<=players;i++){
+    html += `<label>Player ${i}</label>
+             <input type="text" id="player_${i}" maxlength="7" value="Player${i}" />`;
+  }
+  html += `<button id="confirmBtn">Confirm</button>`;
+  container.innerHTML = html;
+
+  document.getElementById("confirmBtn").addEventListener("click", ()=>{
+    currentGame.names = [];
+    for(let i=1;i<=players;i++){
+      const name = document.getElementById(`player_${i}`).value.trim() || `Player${i}`;
+      currentGame.names.push(name);
+    }
+    showWordScreen();
+  });
+}
+
+// Stage 3: show word/impostors
+function showWordScreen(){
+  if(wordsData.length === 0){ alert("No words loaded."); return; }
+
+  const randomEntry = wordsData[Math.floor(Math.random() * wordsData.length)];
+  currentGame.secretWord = randomEntry.word;
+  currentGame.hint = randomEntry.hint;
+
+  currentGame.impostors = [];
+  while(currentGame.impostors.length < currentGame.impostorCount){
+    const pick = Math.floor(Math.random()*currentGame.names.length);
+    if(!currentGame.impostors.includes(pick)) currentGame.impostors.push(pick);
+  }
+
+  let viewedCount = 0;
+  let html = `<h2>Who will view the word?</h2>`;
+  currentGame.names.forEach((n,i)=>{
+    html += `<button class="playerBtn" data-id="${i}" id="btn_${i}">${n}</button>`;
+  });
+  container.innerHTML = html;
+
+  const oldPopup = document.querySelector(".overlay");
+  if(oldPopup) oldPopup.remove();
+
+  const popup = document.createElement("div");
+  popup.className = "overlay";
+  popup.innerHTML = `<div class="card"><h3>Your Role</h3><p id="popupWord" style="font-size:1.3rem;margin:16px 0;"></p><button id="closePopup">OK</button></div>`;
+  document.body.appendChild(popup);
+
+  document.querySelectorAll(".playerBtn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = parseInt(btn.dataset.id);
+      if(currentGame.impostors.includes(id)){
+        document.getElementById("popupWord").innerHTML = `<span style="color:red; font-weight:bold;">Impostor</span><br><br><small>${currentGame.hint}</small>`;
+      } else {
+        document.getElementById("popupWord").textContent = currentGame.secretWord;
+      }
+      popup.style.display = "flex";
+      btn.disabled = true;
+      viewedCount++;
+    });
+  });
+
+  popup.querySelector("#closePopup").addEventListener("click", ()=>{
+    popup.style.display = "none";
+    if(viewedCount === currentGame.names.length){
+      showAllViewedScreen();
+    }
+  });
+
+  popup.addEventListener("click", e=>{ if(e.target===popup) popup.style.display="none"; });
+}
+
+// Stage 4
+function showAllViewedScreen(){
+  let html = `<h2>All players have seen their words!</h2>`;
+  html += `<button id="showResultsBtn">Show Results</button>`;
+  container.innerHTML = html;
+  document.getElementById("showResultsBtn").addEventListener("click", showResultsScreen);
+}
+
+// Stage 5: results
+function showResultsScreen(){
+  let html = `<h2>Results</h2>`;
+  html += `<p><strong>Word:</strong> ${currentGame.secretWord}</p>`;
+  html += `<p><strong>Impostor(s):</strong> ${currentGame.impostors.map(i=>currentGame.names[i]).join(", ")}</p>`;
+  html += `<button id="playAgainBtn">Play Again</button>`;
+  html += `<button id="startOverBtn">Start Over</button>`;
+  container.innerHTML = html;
+
+  document.getElementById("playAgainBtn").addEventListener("click", showWordScreen);
+  document.getElementById("startOverBtn").addEventListener("click", resetGame);
+}
+
+// Reset to stage 1
+function resetGame(){
+  currentGame = { names: [], impostorCount:0, secretWord:'', hint:'', impostors:[] };
+  container.innerHTML = `
+    <label for="players">How many players?</label>
+    <input type="number" id="players" min="2" max="20" placeholder="Enter number of players" />
+
+    <label for="impostors">How many impostors?</label>
+    <select id="impostors" disabled></select>
+
+    <button id="nextBtn" disabled>Next</button>
+  `;
+  // Reassign listeners
+  const playersInputNew = document.getElementById("players");
+  const impostorsSelectNew = document.getElementById("impostors");
+  const nextBtnNew = document.getElementById("nextBtn");
+
+  playersInputNew.addEventListener("input", () => {
+    let numPlayers = parseInt(playersInputNew.value);
+    if(isNaN(numPlayers) || numPlayers < 2) numPlayers = 0;
+    else if(numPlayers > 20) numPlayers = 20;
+
+    if(numPlayers >=2){
+      impostorsSelectNew.disabled = false;
+      impostorsSelectNew.innerHTML = '';
+      const maxImpostors = numPlayers -2;
+      for(let i=1;i<=maxImpostors;i++){
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i;
+        impostorsSelectNew.appendChild(opt);
+      }
+      nextBtnNew.disabled = false;
+    } else {
+      impostorsSelectNew.disabled = true;
+      nextBtnNew.disabled = true;
+    }
+  });
+
+  nextBtnNew.addEventListener("click", ()=>{
+    const players = parseInt(playersInputNew.value);
+    const impostors = parseInt(impostorsSelectNew.value);
+    currentGame.impostorCount = impostors;
+    showNameScreen(players, impostors);
+  });
+}
+</script>
+</body>
+</html>
