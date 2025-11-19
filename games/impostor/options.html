@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Used Words</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  li {
+    background: #1e1e1e;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  button {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background: #45a049;
+  }
+</style>
+</head>
+<body>
+    
+  <h1>Used Words</h1>
+  <button id="resetBtn">Reset Words</button>
+  <ul id="wordsList"></ul>
+  
+
+  <script>
+    const wordsList = document.getElementById('wordsList');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Load used words from localStorage
+    function loadUsedWords() {
+      const data = localStorage.getItem("usedWords");
+      return data ? JSON.parse(data) : [];
+    }
+
+    // Render the list of used words
+    function renderWords() {
+      const usedWords = loadUsedWords();
+      wordsList.innerHTML = '';
+      if (usedWords.length === 0) {
+        wordsList.innerHTML = '<li>Δεν υπάρχουν λέξεις που έχουν χρησιμοποιηθεί ακόμα.</li>';
+      } else {
+        usedWords.forEach(word => {
+          const li = document.createElement('li');
+          li.textContent = word;
+          wordsList.appendChild(li);
+        });
+      }
+    }
+
+    // Reset words button
+    resetBtn.addEventListener('click', () => {
+      if(confirm("Θέλετε να επαναφέρετε όλες τις λέξεις;")) {
+        localStorage.removeItem("usedWords");
+        renderWords();
+      }
+    });
+
+    // Initial render
+    renderWords();
+  </script>
+</body>
+</html>
