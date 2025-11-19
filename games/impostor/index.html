@@ -185,14 +185,60 @@ function showNameScreen(players, impostorCount){
     showWordScreen();
   });
 }
+// ===============================
+// LOCAL STORAGE WORD SAVING
+// ===============================
+
+// Load used words from localStorage
+function loadUsedWords() {
+  const data = localStorage.getItem("usedWords");
+  return data ? JSON.parse(data) : [];
+}
+
+// Save a word as used
+function saveUsedWord(word) {
+  const used = loadUsedWords();
+  used.push(word);
+  localStorage.setItem("usedWords", JSON.stringify(used));
+}
+
+// Reset used words (if all words have been played)
+function resetUsedWords() {
+  localStorage.removeItem("usedWords");
+}
+
+// Pick a NEW unused word
+function pickNewWord() {
+  const used = loadUsedWords();
+
+  // Filter unused words
+  const unused = wordsData.filter(entry => !used.includes(entry.word));
+
+  // If all played → reset and restart
+  if (unused.length === 0) {
+    resetUsedWords();
+    alert("Όλες οι λέξεις παίχτηκαν! Η λίστα ανανεώθηκε.");
+    return pickNewWord();
+  }
+
+  // Choose random unused entry
+  const choice = unused[Math.floor(Math.random() * unused.length)];
+
+  // Save it to localStorage
+  saveUsedWord(choice.word);
+
+  return choice;
+}
 
 // Stage 3: show word/impostors
 function showWordScreen(){
   if(wordsData.length === 0){ alert("No words loaded."); return; }
 
-  const randomEntry = wordsData[Math.floor(Math.random() * wordsData.length)];
+  const randomEntry = pickNewWord();
   currentGame.secretWord = randomEntry.word;
   currentGame.hint = randomEntry.hint;
+  currentGame.category = randomEntry.category;
+
 
   currentGame.impostors = [];
   while(currentGame.impostors.length < currentGame.impostorCount){
@@ -212,17 +258,36 @@ function showWordScreen(){
 
   const popup = document.createElement("div");
   popup.className = "overlay";
-  popup.innerHTML = `<div class="card"><h3>Your Role</h3><p id="popupWord" style="font-size:1.3rem;margin:16px 0;"></p><button id="closePopup">OK</button></div>`;
+  popup.innerHTML = `
+    <div class="card">
+      <small>Η λέξη βρίσκεται στην κατηγορία: ${currentGame.category}<small>
+      <p id="popupWord" style="font-size:1.3rem;margin:16px 0;"></p>
+      <button id="closePopup">OK</button>
+    </div>`;
   document.body.appendChild(popup);
 
   document.querySelectorAll(".playerBtn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const id = parseInt(btn.dataset.id);
+
       if(currentGame.impostors.includes(id)){
-        document.getElementById("popupWord").innerHTML = `<span style="color:red; font-weight:bold;">Impostor</span><br><br><small>${currentGame.hint}</small>`;
+        // IMPOSTOR
+        document.getElementById("popupWord").innerHTML = `
+          <h2><span style="color:red; font-weight:bold;">Impostor</span><br></h2>
+          
+          Hint: ${currentGame.hint}<small>
+          
+        `;
       } else {
-        document.getElementById("popupWord").textContent = currentGame.secretWord;
+        // NORMAL PLAYER
+        document.getElementById("popupWord").innerHTML = `
+          <h2><span style="color:green; font-weight:bold;">${currentGame.secretWord}</span><br></h2>
+          
+          Hint: ${currentGame.hint}<br>
+          
+        `;
       }
+
       popup.style.display = "flex";
       btn.disabled = true;
       viewedCount++;
@@ -236,8 +301,11 @@ function showWordScreen(){
     }
   });
 
-  popup.addEventListener("click", e=>{ if(e.target===popup) popup.style.display="none"; });
+  popup.addEventListener("click", e=>{ 
+    if(e.target===popup) popup.style.display="none"; 
+  });
 }
+
 
 // Stage 4
 function showAllViewedScreen(){
@@ -249,8 +317,9 @@ function showAllViewedScreen(){
 
 // Stage 5: results
 function showResultsScreen(){
-  let html = `<h2>Results</h2>`;
+  let html = `<center><h2>Results</h2></center>`;
   html += `<p><strong>Word:</strong> ${currentGame.secretWord}</p>`;
+  html += `<p><strong>Hint:</strong> ${currentGame.hint}</p>`;
   html += `<p><strong>Impostor(s):</strong> ${currentGame.impostors.map(i=>currentGame.names[i]).join(", ")}</p>`;
   html += `<button id="playAgainBtn">Play Again</button>`;
   html += `<button id="startOverBtn">Start Over</button>`;
