@@ -15,6 +15,10 @@
     align-items: center;
     height: 100vh;
     padding: 20px;
+     flex-direction: column;
+       height: 100%;
+
+  justify-content: flex-start; /* start from top for smaller screens */
   }
 .container {
   width: 100%;
@@ -25,6 +29,8 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
+    max-height: calc(100vh - 150px); /* leave space for image above */
+
   
 }
   label { 
@@ -89,17 +95,69 @@ input, select {
     max-width:300px; 
     
   }
+.checkboxRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center; /* ensures both label blocks align vertically */
+}
+
+/* make each label a horizontal flex row and prevent wrapping */
+.checkboxRow label {
+  display: inline-flex;
+  align-items: center;   /* <-- vertically center checkbox + text */
+  gap: 8px;
+  white-space: nowrap;   /* keep label text on one line */
+  font-size: 0.95rem;
+  line-height: 1;        /* keep line-height tight so text centers with input */
+}
+.responsive-img {
+   max-width: 100%;  /* scales with screen width */
+   height: auto;     /* keeps aspect ratio */
+   margin-bottom: 20px; /* space between image and container */
+ }
+/* size the native checkbox so it lines up with text */
+.checkboxRow input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;             /* remove default margins that push it off */
+  display: inline-block;
+  vertical-align: middle;
+  /* optional: make the checkbox color match your theme (modern browsers) */
+  accent-color: #4caf50;
+}
+@media (max-height: 500px) {
+  .responsive-img { max-height: 15vh; }
+  .container { max-height: 75vh; }
+}
+/* small tweak for older Safari / some mobile UIs: nudge the checkbox slightly */
+@supports(-webkit-appearance: none) {
+  .checkboxRow input[type="checkbox"] {
+    transform: translateY(1px);
+  }
+}
+
+
 </style>
 </head>
 <body>
+ <img id="stageImage" class="responsive-img" style="display:none;">
 <div class="container" id="gameContainer">
-  <label for="players">How many players?</label>
-  <input type="number" id="players" min="2" max="20" placeholder="Enter number of players" />
+  <form autocomplete="off">
+    <label for="players">How many players?</label>
+    <input type="number" id="players" min="2" max="20" placeholder="Enter number of players" autocomplete="off">
 
-  <label for="impostors">How many impostors?</label>
-  <select id="impostors" disabled></select>
+    <label for="impostors">How many impostors?</label>
+    <select id="impostors" disabled autocomplete="off"></select>
 
-  <button id="nextBtn" disabled>Next</button>
+    <div class="checkboxRow">
+        <label><input type="checkbox" id="showHint" checked> Βοήθεια</label>
+        <label><input type="checkbox" id="showCategory" checked> Κατηγορία</label>
+    </div>
+
+    <button id="nextBtn" disabled>Next</button>
+  </form>
 </div>
 
 <script>
@@ -117,6 +175,16 @@ let currentGame = {
   impostors: []
 };
 
+function setStageImage(src) {
+  const img = document.getElementById("stageImage");
+  if (!src) {
+    img.style.display = "none";
+    return;
+  }
+  img.src = src;
+  img.style.display = "block";
+}
+setStageImage("image1.jpg");
 // Load words.json
 fetch('words.json')
   .then(resp => resp.json())
@@ -163,11 +231,15 @@ nextBtn.addEventListener("click", () => {
   const players = parseInt(playersInput.value);
   const impostors = parseInt(impostorsSelect.value);
   currentGame.impostorCount = impostors;
+  currentGame.showHint = document.getElementById("showHint").checked;
+  currentGame.showCategory = document.getElementById("showCategory").checked;
+
   showNameScreen(players, impostors);
 });
 
 // Stage 2: enter player names
 function showNameScreen(players, impostorCount){
+  setStageImage(null);
   let html = `<h2>Enter Player Names</h2>`;
   for(let i=1;i<=players;i++){
     html += `<label>Player ${i}</label>
@@ -230,62 +302,100 @@ function pickNewWord() {
   return choice;
 }
 
-// Stage 3: show word/impostors
-function showWordScreen(){
-  if(wordsData.length === 0){ alert("No words loaded."); return; }
+// Stage 3: show word/impostors (replace your existing function)
+function showWordScreen() {
+  setStageImage(null);
+  
+  if (wordsData.length === 0) { alert("No words loaded."); return; }
 
   const randomEntry = pickNewWord();
   currentGame.secretWord = randomEntry.word;
   currentGame.hint = randomEntry.hint;
   currentGame.category = randomEntry.category;
 
-
+  // pick impostors
   currentGame.impostors = [];
-  while(currentGame.impostors.length < currentGame.impostorCount){
-    const pick = Math.floor(Math.random()*currentGame.names.length);
-    if(!currentGame.impostors.includes(pick)) currentGame.impostors.push(pick);
+  while (currentGame.impostors.length < currentGame.impostorCount) {
+    const pick = Math.floor(Math.random() * currentGame.names.length);
+    if (!currentGame.impostors.includes(pick)) currentGame.impostors.push(pick);
   }
 
   let viewedCount = 0;
   let html = `<h2>Who will view the word?</h2>`;
-  currentGame.names.forEach((n,i)=>{
+  currentGame.names.forEach((n,i) => {
     html += `<button class="playerBtn" data-id="${i}" id="btn_${i}">${n}</button>`;
   });
   container.innerHTML = html;
 
+  // remove old popup if any
   const oldPopup = document.querySelector(".overlay");
-  if(oldPopup) oldPopup.remove();
+  if (oldPopup) oldPopup.remove();
 
+  // create popup skeleton (content will be filled on reveal)
   const popup = document.createElement("div");
   popup.className = "overlay";
   popup.innerHTML = `
     <div class="card">
-      <small>Η λέξη βρίσκεται στην κατηγορία: ${currentGame.category}<small>
-      <p id="popupWord" style="font-size:1.3rem;margin:16px 0;"></p>
+      <div id="popupMeta" style="margin-bottom:6px"></div>
+      <p id="popupWord" style="font-size:1.3rem; margin:16px 0;"></p>
       <button id="closePopup">OK</button>
-    </div>`;
+    </div>
+  `;
   document.body.appendChild(popup);
 
-  document.querySelectorAll(".playerBtn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const id = parseInt(btn.dataset.id);
+  // helper: robust checkbox getter (supports multiple possible ids)
+  function checkboxChecked(...ids) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el) return !!el.checked;
+    }
+    // fallback to currentGame flags if present, otherwise true
+    if (typeof currentGame.showHint !== 'undefined' && typeof currentGame.showCategory !== 'undefined') {
+      // if caller asked for a hint check, caller should pass which flag is requested
+      // but here we just return undefined to let caller decide
+      return undefined;
+    }
+    return undefined;
+  }
 
-      if(currentGame.impostors.includes(id)){
-        // IMPOSTOR
-        document.getElementById("popupWord").innerHTML = `
-          <h2><span style="color:red; font-weight:bold;">Impostor</span><br></h2>
-          
-          Hint: ${currentGame.hint}<small>
-          
-        `;
+  // Better: explicit functions for hint/category so we can fallback consistently
+  function isShowHint() {
+    // check multiple possible checkbox ids
+    const byId = (document.getElementById("showHint") || document.getElementById("showHintCheckbox"));
+    if (byId) return !!byId.checked;
+    // fallback to currentGame flag if set
+    if (typeof currentGame.showHint !== 'undefined') return !!currentGame.showHint;
+    // default: true
+    return true;
+  }
+  function isShowCategory() {
+    const byId = (document.getElementById("showCategory") || document.getElementById("showCategoryCheckbox"));
+    if (byId) return !!byId.checked;
+    if (typeof currentGame.showCategory !== 'undefined') return !!currentGame.showCategory;
+    return true;
+  }
+
+  // Add listeners to player buttons
+  document.querySelectorAll(".playerBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = parseInt(btn.dataset.id);
+      const showHint = isShowHint();
+      const showCategory = isShowCategory();
+
+      // popupMeta: show category only if enabled
+      const metaEl = document.getElementById("popupMeta");
+      metaEl.innerHTML = showCategory ? `<small style="display:block">Κατηγορία: <strong>${currentGame.category}</strong></small>` : "";
+
+      // fill popupWord depending on role
+      const wordEl = document.getElementById("popupWord");
+      if (currentGame.impostors.includes(id)) {
+        // Impostor view (word hidden)
+        const hintHtml = showHint ? `<div style="margin-top:8px;"><small>Hint: ${currentGame.hint}</small></div>` : "";
+        wordEl.innerHTML = `<h2><span style="color:red; font-weight:bold;">Impostor</span></h2>${hintHtml}`;
       } else {
-        // NORMAL PLAYER
-        document.getElementById("popupWord").innerHTML = `
-          <h2><span style="color:green; font-weight:bold;">${currentGame.secretWord}</span><br></h2>
-          
-          Hint: ${currentGame.hint}<br>
-          
-        `;
+        // Normal player view (word shown)
+        const hintHtml = showHint ? `<div style="margin-top:8px;"><small>Hint: ${currentGame.hint}</small></div>` : "";
+        wordEl.innerHTML = `<h2><span style="color:green; font-weight:bold;">${currentGame.secretWord}</span></h2>${hintHtml}`;
       }
 
       popup.style.display = "flex";
@@ -294,21 +404,25 @@ function showWordScreen(){
     });
   });
 
-  popup.querySelector("#closePopup").addEventListener("click", ()=>{
+  // close button
+  popup.querySelector("#closePopup").addEventListener("click", () => {
     popup.style.display = "none";
-    if(viewedCount === currentGame.names.length){
+    if (viewedCount === currentGame.names.length) {
       showAllViewedScreen();
     }
   });
 
-  popup.addEventListener("click", e=>{ 
-    if(e.target===popup) popup.style.display="none"; 
-  });
+  // click outside to close
+  popup.addEventListener("click", e => { if (e.target === popup) popup.style.display = "none"; });
 }
+
+
 
 
 // Stage 4
 function showAllViewedScreen(){
+  setStageImage(null);
+  setStageImage("image2.jpg");
   let html = `<h2>All players have seen their words!</h2>`;
   html += `<button id="showResultsBtn">Show Results</button>`;
   container.innerHTML = html;
@@ -316,65 +430,47 @@ function showAllViewedScreen(){
 }
 
 // Stage 5: results
-function showResultsScreen(){
+// Stage 5: results
+function showResultsScreen() {
+
+  setStageImage(null);
+  setStageImage("image3.webp");
+
+  // Read stored settings, NOT deleted checkboxes
+  const showHint = currentGame.showHint;
+  const showCategory = currentGame.showCategory;
+
   let html = `<center><h2>Results</h2></center>`;
   html += `<p><strong>Word:</strong> ${currentGame.secretWord}</p>`;
-  html += `<p><strong>Hint:</strong> ${currentGame.hint}</p>`;
-  html += `<p><strong>Impostor(s):</strong> ${currentGame.impostors.map(i=>currentGame.names[i]).join(", ")}</p>`;
+
+  if (showHint)
+    html += `<p><strong>Hint:</strong> ${currentGame.hint}</p>`;
+
+  if (showCategory)
+    html += `<p><strong>Category:</strong> ${currentGame.category}</p>`;
+
+  html += `<p><strong>Impostor(s):</strong> ${currentGame.impostors.map(i => currentGame.names[i]).join(", ")}</p>`;
+
   html += `<button id="playAgainBtn">Play Again</button>`;
   html += `<button id="startOverBtn">Start Over</button>`;
+
   container.innerHTML = html;
 
   document.getElementById("playAgainBtn").addEventListener("click", showWordScreen);
   document.getElementById("startOverBtn").addEventListener("click", resetGame);
 }
 
-// Reset to stage 1
-function resetGame(){
-  currentGame = { names: [], impostorCount:0, secretWord:'', hint:'', impostors:[] };
-  container.innerHTML = `
-    <label for="players">How many players?</label>
-    <input type="number" id="players" min="2" max="20" placeholder="Enter number of players" />
 
-    <label for="impostors">How many impostors?</label>
-    <select id="impostors" disabled></select>
 
-    <button id="nextBtn" disabled>Next</button>
-  `;
-  // Reassign listeners
-  const playersInputNew = document.getElementById("players");
-  const impostorsSelectNew = document.getElementById("impostors");
-  const nextBtnNew = document.getElementById("nextBtn");
 
-  playersInputNew.addEventListener("input", () => {
-    let numPlayers = parseInt(playersInputNew.value);
-    if(isNaN(numPlayers) || numPlayers < 2) numPlayers = 0;
-    else if(numPlayers > 20) numPlayers = 20;
 
-    if(numPlayers >=2){
-      impostorsSelectNew.disabled = false;
-      impostorsSelectNew.innerHTML = '';
-      const maxImpostors = numPlayers -2;
-      for(let i=1;i<=maxImpostors;i++){
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = i;
-        impostorsSelectNew.appendChild(opt);
-      }
-      nextBtnNew.disabled = false;
-    } else {
-      impostorsSelectNew.disabled = true;
-      nextBtnNew.disabled = true;
-    }
-  });
-
-  nextBtnNew.addEventListener("click", ()=>{
-    const players = parseInt(playersInputNew.value);
-    const impostors = parseInt(impostorsSelectNew.value);
-    currentGame.impostorCount = impostors;
-    showNameScreen(players, impostors);
-  });
+function resetGame() {
+  // Refresh the page to start over
+  location.reload();
 }
+
+
+
 </script>
 </body>
 </html>
